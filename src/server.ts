@@ -1,17 +1,32 @@
 import fastify from "fastify";
+import { crypto } from "node:crypto";
 
-const app = fastify();
+const server = fastify();
 
-app.get("/", async (request, reply) => {
-    return { hello: "world" };
+const courses = [
+    { id: "1", title: "Curso 1" },
+    { id: "2", title: "Curso 2" },
+    { id: "3", title: "Curso 3" },
+];
+
+server.get("/courses", () => {
+    return { courses };
 });
 
-app.listen({ port: 3000 }, (err, address) => {
+server.post("/courses", () => {
+    const randomId = crypto.randomUUID();
+
+    courses.push({ id: randomId, title: "Novo Curso" });
+
+    return { id: randomId };
+});
+
+server.listen({ port: 3333 }, (err, address) => {
     if (err) {
         console.error(err);
         process.exit(1);
     }
-    console.log(`Server listening at ${address}`);
+    console.log(`Servidor escutando a porta ${address}`);
 });
 
-export default app;
+export default server;
