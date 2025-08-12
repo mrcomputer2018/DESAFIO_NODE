@@ -1,7 +1,18 @@
 import fastify from "fastify";
 import crypto from "node:crypto";
 
-const server = fastify();
+const server = fastify({
+    logger: {
+        transport: {
+            target: "pino-pretty",
+            options: {
+                translateTime: "HH:MM:ss Z",
+                ignore: "pid,hostname",
+                colorize: true,
+            },
+        },
+    },
+});
 
 const courses = [
     { id: "1", title: "Curso 1" },
@@ -10,7 +21,7 @@ const courses = [
 ];
 
 server.get("/courses", () => {
-    return { courses};
+    return { courses };
 });
 
 server.get("/courses/:id", (request, reply) => {
@@ -29,7 +40,9 @@ server.post("/courses", (request, reply) => {
     const courseId = crypto.randomUUID();
 
     if (!courseTitle) {
-        return reply.status(400).send({ error: "Título do curso é obrigatório" });
+        return reply
+            .status(400)
+            .send({ error: "Título do curso é obrigatório" });
     }
 
     courses.push({ id: courseId, title: courseTitle });

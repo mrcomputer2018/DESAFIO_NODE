@@ -1,3 +1,5 @@
+
+
 POST http://localhost:3333/courses
 Content-Type: application/json
 
