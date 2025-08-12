@@ -1,5 +1,5 @@
 import fastify from "fastify";
-import { crypto } from "node:crypto";
+import crypto from "node:crypto";
 
 const server = fastify();
 
@@ -10,15 +10,31 @@ const courses = [
 ];
 
 server.get("/courses", () => {
-    return { courses };
+    return { courses};
 });
 
-server.post("/courses", () => {
-    const randomId = crypto.randomUUID();
+server.get("/courses/:id", (request, reply) => {
+    const courseId = (request.params as { id: string }).id;
 
-    courses.push({ id: randomId, title: "Novo Curso" });
+    const course = courses.find((course) => course.id === courseId);
 
-    return { id: randomId };
+    if (!course) {
+        return reply.status(404);
+    }
+    return { course };
+});
+
+server.post("/courses", (request, reply) => {
+    const courseTitle = (request.body as { title: string }).title;
+    const courseId = crypto.randomUUID();
+
+    if (!courseTitle) {
+        return reply.status(400).send({ error: "Título do curso é obrigatório" });
+    }
+
+    courses.push({ id: courseId, title: courseTitle });
+
+    return reply.status(201).send({ id: courseId });
 });
 
 server.listen({ port: 3333 }, (err, address) => {
