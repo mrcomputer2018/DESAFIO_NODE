@@ -1,0 +1,20 @@
+{
+    "name": "desafio-node",
+    "version": "1.0.0",
+    "description": "desafio de criacao de uma api rest node",
+    "license": "ISC",
+    "author": "",
+    "type": "commonjs",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node --watch src/server.ts"
+    },
+    "dependencies": {
+        "fastify": "^5.5.0"
+    },
+    "devDependencies": {
+        "@types/node": "^24.2.1",
+        "typescript": "^5.9.2"
+    }
+}
